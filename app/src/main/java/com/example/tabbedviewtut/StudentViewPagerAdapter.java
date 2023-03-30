@@ -19,14 +19,13 @@ public class StudentViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
-            case 0:
-                return new DisplayFragment();
+
             case 1:
-                return new UnitsFragment();
+                return new   UnitsFragment();
             case 2:
-                return new DetailsFragment();
+                return new   DisplayFragment();
             default:
-                return new DisplayFragment();
+                return new  DetailsFragment();
         }
     }
 
