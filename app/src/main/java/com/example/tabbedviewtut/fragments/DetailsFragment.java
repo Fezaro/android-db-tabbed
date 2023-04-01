@@ -30,7 +30,6 @@ public class DetailsFragment extends Fragment {
         setComponents(detView);
         return detView;
 
-
     }
 
     private void setComponents(View view) {
@@ -65,10 +64,10 @@ public class DetailsFragment extends Fragment {
         String[] studentDetails = getInsertedDetails();
         Boolean checkDataInsert = false;
 
-        checkDataInsert = DB.insertUserdata(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]);
+        checkDataInsert = DB.insertUserData(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]);
         if(checkDataInsert == true){
             // show success message
-            clearInputFields();
+            //clearInputFields();
             Toast.makeText(getContext(), "Student Details Inserted", Toast.LENGTH_SHORT).show();
 
         }else{

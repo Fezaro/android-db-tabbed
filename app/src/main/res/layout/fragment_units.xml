@@ -6,12 +6,98 @@
     tools:context=".fragments.UnitsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-
+    <EditText
+        android:id="@+id/unitCode2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Student units here"
-        android:layout_centerInParent="true"
-        android:textSize="32dp"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="344dp"
+        android:layout_marginEnd="156dp"
+        android:ems="10"
+        android:hint="Unit code"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/unitCode3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="415dp"
+        android:layout_marginEnd="153dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Unit code" />
+
+    <EditText
+        android:id="@+id/unitCode4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="486dp"
+        android:layout_marginEnd="150dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Unit code" />
+
+    <EditText
+        android:id="@+id/unitCode5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="558dp"
+        android:layout_marginEnd="151dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Unit code" />
+
+    <TextView
+        android:layout_width="332dp"
+        android:layout_height="87dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="34dp"
+        android:text="Units Details"
+        android:textSize="48sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="207dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="221dp"
+        android:layout_marginEnd="158dp"
+        android:height="30dp"
+        android:elegantTextHeight="true"
+        android:text="Choose units to take:"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:id="@+id/unitCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="274dp"
+        android:layout_marginEnd="157dp"
+        android:ems="10"
+        android:hint="Unit code"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/unitSubmit"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="622dp"
+        android:layout_marginEnd="131dp"
+        android:text="Submit" />
 
 </RelativeLayout>
