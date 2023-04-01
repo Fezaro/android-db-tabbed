@@ -8,7 +8,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/lastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -16,11 +16,11 @@
         android:layout_marginTop="344dp"
         android:layout_marginEnd="156dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Last Name" />
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/idNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -29,10 +29,10 @@
         android:layout_marginEnd="153dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="ID Number" />
+        android:hint="ID Number" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName5"
+        android:id="@+id/courseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -41,10 +41,10 @@
         android:layout_marginEnd="150dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Course" />
+        android:hint="Course" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName6"
+        android:id="@+id/gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -53,7 +53,7 @@
         android:layout_marginEnd="151dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Gender" />
+        android:hint="Gender" />
 
     <TextView
         android:layout_width="332dp"
@@ -78,7 +78,7 @@
         android:text="Fill in the following details" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/firstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -86,8 +86,8 @@
         android:layout_marginTop="274dp"
         android:layout_marginEnd="157dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="First Name" />
+        android:hint="First Name"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/button"
