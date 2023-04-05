@@ -5,23 +5,25 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DbHelper extends SQLiteOpenHelper {
     public DbHelper(@Nullable Context context) {
-        super(context, "Student.db", null, 1);
+        super(context, "university.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create Table StudentDetails(firstName TEXT, LastName TEXT, id TEXT primary key, course TEXT, gender TEXT)");
-        // create another table to store 5 units with foreignkey referencing student id
-        sqLiteDatabase.execSQL("create Table Units(unit1 TEXT, unit2 TEXT, unit3 TEXT, unit4 TEXT, unit5 TEXT)");
-
-
-
-
+        sqLiteDatabase.execSQL("create Table StudentDetails(firstName TEXT, LastName TEXT, studId TEXT primary key, course TEXT, gender TEXT)");
+        // create another table to store  units
+        sqLiteDatabase.execSQL("create Table Units(unitCode TEXT,unitId TEXT primary key)");
+        // create student_ units table to store student units
+        sqLiteDatabase.execSQL("create Table Student_Units(unitId TEXT, studId TEXT, foreign key (unitId) references Units(unitId), foreign key (studId) references StudentDetails(studId))");
 
     }
 
@@ -29,6 +31,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("drop Table if exists StudentDetails");
         sqLiteDatabase.execSQL("drop Table if exists Units");
+        sqLiteDatabase.execSQL("drop Table if exists Student_Units");
 
 
     }
@@ -38,16 +41,15 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("firstName", fname);
         contentValues.put("lastName", lname);
-        contentValues.put("id", id);
+        contentValues.put("studId", id);
         contentValues.put("course", course);
         contentValues.put("gender", gender);
-        long result = sqLiteDatabase.insert("StudentDetails", null, contentValues);
 
-        if(result == -1){
-            return false;
-        }else {
-            return true;
-        }
+        long result = sqLiteDatabase.insert("StudentDetails", null, contentValues);
+        // close db
+        sqLiteDatabase.close();
+
+        return result != -1;
     }
 
     public Boolean updateUserData(String fname, String lname, String id, String course, String gender){
@@ -62,15 +64,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if(cursor.getCount() > 0){
             long result = sqLiteDatabase.update("StudentDetails", contentValues, "id=?", new String[]{id});
-
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            cursor.close();
+            return result != -1;
         }else {
+            cursor.close();
             return false;
         }
+
     }
 
     public Boolean deleteUserData(String id ){
@@ -80,62 +80,52 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if(cursor.getCount() > 0){
             long result = sqLiteDatabase.delete("StudentDetails", "id=?", new String[]{id});
-
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            cursor.close();
+            return result != -1;
         }else {
+            cursor.close();
             return false;
         }
     }
 
     public Cursor getStudentData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from StudentDetails", null);
-        return cursor;
+        return sqLiteDatabase.rawQuery("Select * from StudentDetails", null);
     }
 
     // insert unit data
-    public Boolean insertUnitsData(String unit1, String unit2, String unit3, String unit4, String unit5){
+    public Boolean insertUnitData(String unitCode, String unitId){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("unit1", unit1);
-        contentValues.put("unit2", unit2);
-        contentValues.put("unit3", unit3);
-        contentValues.put("unit4", unit4);
-        contentValues.put("unit5", unit5);
-        long result = sqLiteDatabase.insert("Units", null, contentValues);
 
-        if(result == -1){
-            return false;
-        }else {
-            return true;
-        }
+        contentValues.put("unitCode", unitCode);
+        contentValues.put("unitId", unitId);
+
+        long result = sqLiteDatabase.insert("Units", null, contentValues);
+        // close db
+        sqLiteDatabase.close();
+
+
+        return result != -1;
     }
 
     // update unit data
-    public Boolean updateUnitsData(String unit1, String unit2, String unit3, String unit4, String unit5){
+    public Boolean updateUnitsData(String unitCode, String unitId){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("unit1", unit1);
-        contentValues.put("unit2", unit2);
-        contentValues.put("unit3", unit3);
-        contentValues.put("unit4", unit4);
-        contentValues.put("unit5", unit5);
 
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units", null);
+        contentValues.put("unitCode", unitCode);
+
+
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where unitId=?" , new String[]{unitId});
 
         if(cursor.getCount() > 0){
             long result = sqLiteDatabase.update("Units", contentValues, null, null);
+            cursor.close();
 
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            return result != -1;
         }else {
+            cursor.close();
             return false;
         }
     }
@@ -144,26 +134,79 @@ public class DbHelper extends SQLiteOpenHelper {
     public Boolean deleteUnitsData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where UnitId=?", null);
 
         if(cursor.getCount() > 0){
             long result = sqLiteDatabase.delete("Units", null, null);
+            cursor.close();
 
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            return result != -1;
         }else {
+            cursor.close();
+
             return false;
         }
+
     }
+    // check if student id exists
+    public Boolean checkStudentId(String id){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM StudentDetails WHERE studId=?", new String[]{id});
+        int count = cursor.getCount();
+        Log.d("DB_CHECK", "Number of rows returned by the cursor: " + count);
+        return count > 0;
+    }
+
 
     // get unit data
     public Cursor getUnitsData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units", null);
-        return cursor;
+        return sqLiteDatabase.rawQuery("Select * from Units", null);
     }
+
+    // add units to a specific student
+    public void addStudentUnits(String studId, String unitId ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+
+            contentValues.put("studId", studId);
+            contentValues.put("unitId", unitId);
+
+            sqLiteDatabase.insert("Student_Units", null, contentValues);
+
+        // close db
+        sqLiteDatabase.close();
+
+    }
+
+    // delete student unit relationship
+    public void deleteStudentUnit(String studId, String unitId){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete("Student_Units", "studId=? and unitId=?", new String[]{studId, unitId});
+        sqLiteDatabase.close();
+
+    }
+
+    // get all units taken by a SPECIFIC STUDENT
+    public List<String> getStudentUnits(String studId){
+        // create list to store units
+        List<String> unitsList = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where unitId IN (SELECT unitId FROM Student_Units WHERE studId=?)", new String[]{studId});
+        // loop through the cursor and add the units to the list
+        if(cursor.moveToFirst()){
+            do{
+                unitsList.add(cursor.getString(0));
+            }while (cursor.moveToNext());
+        }
+//        free cursor
+        cursor.close();
+
+        return unitsList;
+    }
+
+    //
+
 
 }
