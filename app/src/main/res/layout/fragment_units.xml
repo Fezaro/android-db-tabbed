@@ -6,98 +6,39 @@
     tools:context=".fragments.UnitsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <EditText
-        android:id="@+id/unitCode2"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout_student_id"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="344dp"
-        android:layout_marginEnd="156dp"
-        android:ems="10"
-        android:hint="Unit code"
-        android:inputType="textPersonName" />
+        android:hint="Student ID">
 
-    <EditText
-        android:id="@+id/unitCode3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="415dp"
-        android:layout_marginEnd="153dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Unit code" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_student_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/unitCode4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="486dp"
-        android:layout_marginEnd="150dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Unit code" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/checkbox_layout_units"
+        android:layout_below="@+id/text_input_layout_student_id">
 
-    <EditText
-        android:id="@+id/unitCode5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="558dp"
-        android:layout_marginEnd="151dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Unit code" />
 
-    <TextView
-        android:layout_width="332dp"
-        android:layout_height="87dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="34dp"
-        android:text="Units Details"
-        android:textSize="48sp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="207dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="221dp"
-        android:layout_marginEnd="158dp"
-        android:height="30dp"
-        android:elegantTextHeight="true"
-        android:text="Choose units to take:"
-        android:textSize="20sp"
-        android:textStyle="bold|italic" />
-
-    <EditText
-        android:id="@+id/unitCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="274dp"
-        android:layout_marginEnd="157dp"
-        android:ems="10"
-        android:hint="Unit code"
-        android:inputType="textPersonName" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/unitSubmit"
-        android:layout_width="159dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="622dp"
-        android:layout_marginEnd="131dp"
-        android:text="Submit" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="61dp"
+        android:layout_marginBottom="70dp"
+        android:id="@+id/units_save_btn"
+        android:text="Save"/>
+
 
 </RelativeLayout>

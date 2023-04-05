@@ -1,5 +1,6 @@
 package com.example.tabbedviewtut.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,13 +13,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.tabbedviewtut.DbHelper;
+import com.example.tabbedviewtut.MainActivity2;
 import com.example.tabbedviewtut.R;
 
 
 public class DetailsFragment extends Fragment {
 
     EditText firstName,lastName,idNumber,courseName,gender;
-    Button button;
+    Button button, updateButton, deleteButton, adminButton;
     DbHelper DB;
 
     @Override
@@ -39,6 +41,9 @@ public class DetailsFragment extends Fragment {
         courseName = view.findViewById(R.id.courseName);
         gender = view.findViewById(R.id.gender);
         button = view.findViewById(R.id.button);
+        updateButton = view.findViewById(R.id.updateButton);
+        deleteButton = view.findViewById(R.id.deleteButton);
+        adminButton = view.findViewById(R.id.adminButton);
 
         // set button click listener
         button.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +53,62 @@ public class DetailsFragment extends Fragment {
             }
         });
 
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDbUpdate()
+                ;
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDbDelete();
+            }
+        });
+
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MainActivity2.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    private void setDbDelete() {
+        String[] studentDetails = getInsertedDetails();
+        Boolean checkDataDelete;
+
+        checkDataDelete = DB.deleteUserData(studentDetails[0]);
+        if(checkDataDelete){
+            // show success message
+            //clearInputFields();
+            Toast.makeText(getContext(), "Student Details Deleted", Toast.LENGTH_SHORT).show();
+
+        }else{
+            // show error message
+            Toast.makeText(getContext(), "Entry not Deleted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setDbUpdate() {
+        String[] studentDetails = getInsertedDetails();
+        Boolean checkDataUpdate = false;
+
+        checkDataUpdate = DB.updateUserData(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]);
+        if(checkDataUpdate){
+            // show success message
+            //clearInputFields();
+            Toast.makeText(getContext(), "Student Details Updated", Toast.LENGTH_SHORT).show();
+
+        }else{
+            // show error message
+            Toast.makeText(getContext(), "Entry not Updated", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String[] getInsertedDetails(){
@@ -65,7 +126,7 @@ public class DetailsFragment extends Fragment {
         Boolean checkDataInsert = false;
 
         checkDataInsert = DB.insertUserData(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]);
-        if(checkDataInsert == true){
+        if(checkDataInsert){
             // show success message
             //clearInputFields();
             Toast.makeText(getContext(), "Student Details Inserted", Toast.LENGTH_SHORT).show();
@@ -75,11 +136,10 @@ public class DetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Entry not Inserted", Toast.LENGTH_SHORT).show();
         }
 
-
     }
 
     private void clearInputFields() {
-        firstName.getText().clear();;
+        firstName.getText().clear();
         lastName.getText().clear();
         idNumber.getText().clear();
         gender.getText().clear();
