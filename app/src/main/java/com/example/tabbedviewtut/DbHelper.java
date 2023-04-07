@@ -19,9 +19,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create Table StudentDetails(firstName TEXT, LastName TEXT, studId TEXT primary key, course TEXT, gender TEXT)");
+        sqLiteDatabase.execSQL("create Table StudentDetails(firstName TEXT NOT NULL, LastName TEXT NOT NULL, studId TEXT UNIQUE primary key, course TEXT NOT NULL, gender TEXT)");
         // create another table to store  units
-        sqLiteDatabase.execSQL("create Table Units(unitCode TEXT,unitId TEXT primary key)");
+        sqLiteDatabase.execSQL("create Table Units(unitCode TEXT NOT NULL,unitId TEXT UNIQUE primary key)");
         // create student_ units table to store student units
         sqLiteDatabase.execSQL("create Table Student_Units(unitId TEXT, studId TEXT, foreign key (unitId) references Units(unitId), foreign key (studId) references StudentDetails(studId))");
 
@@ -193,7 +193,10 @@ public class DbHelper extends SQLiteOpenHelper {
         // create list to store units
         List<String> unitsList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where unitId IN (SELECT unitId FROM Student_Units WHERE studId=?)", new String[]{studId});
+        Cursor cursor = sqLiteDatabase.rawQuery("Select Units.unitId from Units JOIN Student_Units ON Units.unitId = Student_Units.unitId WHERE Student_Units.studId=?", new String[]{studId});
+        // get the cursor count
+        int count = cursor.getCount();
+        Log.d("DB_GET_STD_CHECK", "Number of rows returned by the cursor: " + count);
         // loop through the cursor and add the units to the list
         if(cursor.moveToFirst()){
             do{

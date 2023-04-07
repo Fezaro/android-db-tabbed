@@ -171,6 +171,8 @@ private Boolean isValidStudentId(String studentId) {
 
     private void updateSelectedCheckboxes(View view, String studentId) {
         Log.d("UnitsFragment", "updateSelectedCheckboxes() called");
+        // log out the student ID
+        Log.d("UnitsFragment", "Student ID: " + studentId);
         // get the units already taken by the student
         List<String> takenUnits = DB.getStudentUnits(studentId);
 
