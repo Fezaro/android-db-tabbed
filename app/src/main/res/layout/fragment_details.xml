@@ -105,6 +105,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="477dp"
         android:layout_marginEnd="277dp"
+        android:backgroundTint="#2FF137"
         android:text="Submit" />
 
     <Button
@@ -113,8 +114,9 @@
         android:layout_height="50dp"
         android:layout_below="@id/deleteButton"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="92dp"
+        android:backgroundTint="@color/teal_200"
         android:text="Admin" />
 
     <Button
@@ -124,7 +126,8 @@
         android:layout_below="@+id/button"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="-48dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginEnd="93dp"
+        android:backgroundTint="@color/design_default_color_error"
         android:text="Delete" />
 
     <Button

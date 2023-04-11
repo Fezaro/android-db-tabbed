@@ -56,7 +56,7 @@ public class UnitsFragment extends Fragment {
                     // get the student ID
                     String studentId = editTextStudentId.getText().toString();
                     //show student id on a Toast message
-                    Toast.makeText(getContext(), studentId, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Student found", Toast.LENGTH_SHORT).show();
 
                     // check if the student ID is valid
                     if (isValidStudentId(studentId)) {
@@ -98,6 +98,7 @@ public class UnitsFragment extends Fragment {
                         DB.deleteStudentUnit(studentId, unitId);
                     }
                 }
+                Toast.makeText(getContext(), "Units Saved", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -138,7 +139,7 @@ private Boolean isValidStudentId(String studentId) {
         if (cursor.moveToFirst()) {
             Log.d("CursorCheckTAG", "data in cursor");
             do {
-                allUnits.add(cursor.getString(cursor.getColumnIndexOrThrow("unitId")));
+                allUnits.add(cursor.getString(cursor.getColumnIndexOrThrow("unitCode")));
                 Log.d("addCursorCheckTAG", "data added from cursor");
             } while (cursor.moveToNext());
         }else {
@@ -153,14 +154,14 @@ private Boolean isValidStudentId(String studentId) {
             // clear the checkboxes
             checkboxLayout.removeAllViews();
 
-            // create a new checkbox for each unit
-
-            for (String unitId : allUnits) {
-                Log.d("UnitsFragment", "Creating checkbox for unit " + unitId);
+            // create a new checkbox for each unit CODE AND SET TAG TO UNIT id
+            
+            for (String unitCode : allUnits) {
+                Log.d("UnitsFragment", "Creating checkbox for unit " + unitCode);
                 // create a new checkbox for the unit
                 CheckBox checkBox = new CheckBox(getContext());
-                checkBox.setText(unitId);
-                checkBox.setTag(unitId);
+                checkBox.setText(unitCode);
+                checkBox.setTag(unitCode);
 
                 // add the checkbox to the container
                 checkboxLayout.addView(checkBox);

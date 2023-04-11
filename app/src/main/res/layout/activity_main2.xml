@@ -46,6 +46,26 @@
         android:layout_marginTop="40dp"
         android:text="Add Unit"
         android:id="@+id/unitAdd"
+        android:backgroundTint="#2FF137"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unitAdd"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Delete Unit"
+        android:backgroundTint="@color/design_default_color_error"
+        android:id="@+id/unitDelete"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unitDelete"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Update Unit"
+        android:id="@+id/unitUpdate"
         />
 
 </RelativeLayout>

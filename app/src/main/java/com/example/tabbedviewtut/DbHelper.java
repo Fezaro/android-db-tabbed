@@ -21,7 +21,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create Table StudentDetails(firstName TEXT NOT NULL, LastName TEXT NOT NULL, studId TEXT UNIQUE primary key, course TEXT NOT NULL, gender TEXT)");
         // create another table to store  units
-        sqLiteDatabase.execSQL("create Table Units(unitCode TEXT NOT NULL,unitId TEXT UNIQUE primary key)");
+        sqLiteDatabase.execSQL("create Table Units(unitId TEXT UNIQUE primary key, unitCode TEXT NOT NULL)");
         // create student_ units table to store student units
         sqLiteDatabase.execSQL("create Table Student_Units(unitId TEXT, studId TEXT, foreign key (unitId) references Units(unitId), foreign key (studId) references StudentDetails(studId))");
 
@@ -44,12 +44,17 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put("studId", id);
         contentValues.put("course", course);
         contentValues.put("gender", gender);
+        try {
 
         long result = sqLiteDatabase.insert("StudentDetails", null, contentValues);
         // close db
         sqLiteDatabase.close();
 
         return result != -1;
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
+            return false;
+        }
     }
 
     public Boolean updateUserData(String fname, String lname, String id, String course, String gender){
@@ -60,10 +65,10 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put("course", course);
         contentValues.put("gender", gender);
 
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from StudentDetails where id = ?", new String[]{id});
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from StudentDetails where studId = ?", new String[]{id});
 
         if(cursor.getCount() > 0){
-            long result = sqLiteDatabase.update("StudentDetails", contentValues, "id=?", new String[]{id});
+            long result = sqLiteDatabase.update("StudentDetails", contentValues, "studId=?", new String[]{id});
             cursor.close();
             return result != -1;
         }else {
@@ -76,10 +81,10 @@ public class DbHelper extends SQLiteOpenHelper {
     public Boolean deleteUserData(String id ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from StudentDetails where id = ?", new String[]{id});
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from StudentDetails where studId = ?", new String[]{id});
 
         if(cursor.getCount() > 0){
-            long result = sqLiteDatabase.delete("StudentDetails", "id=?", new String[]{id});
+            long result = sqLiteDatabase.delete("StudentDetails", "studId=?", new String[]{id});
             cursor.close();
             return result != -1;
         }else {
@@ -94,12 +99,12 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // insert unit data
-    public Boolean insertUnitData(String unitCode, String unitId){
+    public Boolean insertUnitData(String unitId, String unitCode){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put("unitCode", unitCode);
         contentValues.put("unitId", unitId);
+        contentValues.put("unitCode", unitCode);
 
         long result = sqLiteDatabase.insert("Units", null, contentValues);
         // close db
@@ -110,7 +115,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // update unit data
-    public Boolean updateUnitsData(String unitCode, String unitId){
+    public Boolean updateUnitsData(String unitId, String unitCode){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -120,7 +125,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where unitId=?" , new String[]{unitId});
 
         if(cursor.getCount() > 0){
-            long result = sqLiteDatabase.update("Units", contentValues, null, null);
+            long result = sqLiteDatabase.update("Units", contentValues,  "unitId=?", new String[]{unitId});
             cursor.close();
 
             return result != -1;
@@ -131,13 +136,13 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // delete unit data
-    public Boolean deleteUnitsData(){
+    public Boolean deleteUnitsData(String id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where UnitId=?", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from Units where unitId=?", new String[]{id});
 
         if(cursor.getCount() > 0){
-            long result = sqLiteDatabase.delete("Units", null, null);
+            long result = sqLiteDatabase.delete("Units", "unitId=?", new String[]{id});
             cursor.close();
 
             return result != -1;
@@ -154,6 +159,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM StudentDetails WHERE studId=?", new String[]{id});
         int count = cursor.getCount();
         Log.d("DB_CHECK", "Number of rows returned by the cursor: " + count);
+        cursor.close();
         return count > 0;
     }
 
