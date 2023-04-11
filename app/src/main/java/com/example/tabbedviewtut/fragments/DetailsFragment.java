@@ -83,7 +83,7 @@ public class DetailsFragment extends Fragment {
         String[] studentDetails = getInsertedDetails();
         Boolean checkDataDelete;
 
-        checkDataDelete = DB.deleteUserData(studentDetails[0]);
+        checkDataDelete = DB.deleteUserData(studentDetails[2]);
         if(checkDataDelete){
             // show success message
             //clearInputFields();
