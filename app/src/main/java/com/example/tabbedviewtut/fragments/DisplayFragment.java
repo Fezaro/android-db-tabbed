@@ -10,13 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tabbedviewtut.DbHelper;
 import com.example.tabbedviewtut.R;
+import com.example.tabbedviewtut.fragments.UnitsFragment;
+
+import java.util.List;
 
 
 public class DisplayFragment extends Fragment {
     DbHelper DB;
+    EditText displayStudentId;
     Button displayButton;
 
 
@@ -32,9 +38,11 @@ public class DisplayFragment extends Fragment {
 
     private void setComponents(View view) {
         displayButton = view.findViewById(R.id.displayButton);
+        displayStudentId = view.findViewById(R.id.studentIdDisplay);
 
         // set button click listener
         displayButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 setDbDataView();
@@ -44,37 +52,50 @@ public class DisplayFragment extends Fragment {
     }
 
     private void setDbDataView() {
-        // get data from db
-        Cursor stud_res = DB.getStudentData();
-        if (stud_res.getCount() == 0) {
-            displayButton.setText("No data found");
+        // get the student ID
+        String studentId = displayStudentId.getText().toString();
+        // check if the student id is valid
+        if (studentId.isEmpty()) {
+            displayButton.setText("Please enter a student ID");
+            return;
+        }
+        //check the id entered against the database
+        if(!DB.checkStudentId(studentId)){
+            Toast.makeText(getContext(), "Student ID not found.", Toast.LENGTH_SHORT).show();;
             return;
         }
 
-        // get data from units table
-        Cursor units_res = DB.getUnitsData();
-        if (units_res.getCount() == 0) {
-            displayButton.setText("No data found");
+        // get data from student table
+        Cursor stud_res = DB.getStudentDetails(studentId);
+
+        // check if the student id is valid
+        if (!stud_res.moveToFirst()) {
+            Toast.makeText(getContext(), "No data found for student ID: " + studentId, Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // get student ID, and course from the database data returned
+        String stuId = stud_res.getString(2);
+        String course = stud_res.getString(3);
+
+        // get the units the student has selected
+        List units_res = DB.getStudentUnits(stuId);
+
+        // create a string buffer to hold the data
 
         StringBuffer buffer = new StringBuffer();
-        while (stud_res.moveToNext()) {
-            buffer.append("Student ID: " + stud_res.getString(2) + "\n");
-            buffer.append("course: " + stud_res.getString(3) + "\n\n");
-
+        buffer.append("Student ID: " + stuId + "\n");
+        buffer.append("course: " + course + "\n\n");
+        // for list of units selected add to the string buffer
+        for (int i = 0; i < units_res.size(); i++) {
+            buffer.append("Unit " + (i + 1) + ": " + units_res.get(i) + "\n");
         }
-
-        while (units_res.moveToNext()) {
-            buffer.append("Unit 1: " + units_res.getString(0) + "\n");
-            buffer.append("Unit 2: " + units_res.getString(1) + "\n");
-            buffer.append("Unit 3: " + units_res.getString(2) + "\n");
-            buffer.append("Unit 4: " + units_res.getString(3) + "\n");
-            buffer.append("Unit 5: " + units_res.getString(4) + "\n\n\n");
-        }
-        showMessage("Student Data", buffer.toString());
-
+//        buffer.append("Unit 1: " + units_res.get(0) + "\n");
+//        buffer.append("Unit 2: " + units_res.get(1) + "\n");
+//        buffer.append("Unit 3: " + units_res.get(2) + "\n");
+//        buffer.append("Unit 4: " + units_res.get(3) + "\n");
+//        buffer.append("Unit 5: " + units_res.get(4) + "\n\n\n");
+        showMessage("Student Details", buffer.toString());
     }
 
     void showMessage(String title, String message) {
