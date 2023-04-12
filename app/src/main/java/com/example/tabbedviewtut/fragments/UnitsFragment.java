@@ -56,12 +56,12 @@ public class UnitsFragment extends Fragment {
                     // get the student ID
                     String studentId = editTextStudentId.getText().toString();
                     //show student id on a Toast message
-                    Toast.makeText(getContext(), "Student found", Toast.LENGTH_SHORT).show();
+
 
                     // check if the student ID is valid
                     if (isValidStudentId(studentId)) {
                         // display the units taken by the student
-
+                        Toast.makeText(getContext(), "Student found", Toast.LENGTH_SHORT).show();
                         updateSelectedCheckboxes(v, studentId);
                     }
                     else {
@@ -104,21 +104,8 @@ public class UnitsFragment extends Fragment {
 
     }
 
-//    private boolean isValidStudentId(CharSequence input) {
-//        // Check if the student id exists in the database
-//        if (DB.checkStudentId(input.toString())) {
-//            Log.d("isValTAG", "Student ID exists");
-//            return true;
-//        } else {
-//            Log.d("isValTAG", "Student ID doesn't exist");
-//
-//            return false;
-//        }
-//
-//
-//
-//    }
-private Boolean isValidStudentId(String studentId) {
+
+    private Boolean isValidStudentId(String studentId) {
     Boolean isValid = false;
 //    DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
     if (studentId.trim().length() != 0) {
@@ -135,15 +122,23 @@ private Boolean isValidStudentId(String studentId) {
 
         // get all units from the database
         Cursor cursor = DB.getUnitsData();
-        List<String> allUnits = new ArrayList<>();
+        List<String> allUnitCodes = new ArrayList<>();
+        List<String> allUnitIds = new ArrayList<>();
+
         if (cursor.moveToFirst()) {
             Log.d("CursorCheckTAG", "data in cursor");
             do {
-                allUnits.add(cursor.getString(cursor.getColumnIndexOrThrow("unitCode")));
+                allUnitCodes.add(cursor.getString(cursor.getColumnIndexOrThrow("unitCode")));
+                allUnitIds.add(cursor.getString(cursor.getColumnIndexOrThrow("unitId")));
                 Log.d("addCursorCheckTAG", "data added from cursor");
             } while (cursor.moveToNext());
         }else {
             Log.d("TAG", "No data in cursor");
+        }
+
+        // check the list of unit IDs
+        for (String unitId : allUnitIds) {
+            Log.d("UnitsFragment UNit IDS", "Unit ID: " + unitId);
         }
 
         // get the layout where the checkboxes will be added
@@ -155,13 +150,15 @@ private Boolean isValidStudentId(String studentId) {
             checkboxLayout.removeAllViews();
 
             // create a new checkbox for each unit CODE AND SET TAG TO UNIT id
-            
-            for (String unitCode : allUnits) {
+            int index =0;
+            for (String unitCode : allUnitCodes) {
+                String unitIdTag = allUnitIds.get(index++);
                 Log.d("UnitsFragment", "Creating checkbox for unit " + unitCode);
+                Log.d("UnitsFragment", "Creating checkbox Unit ID: " + unitIdTag);
                 // create a new checkbox for the unit
                 CheckBox checkBox = new CheckBox(getContext());
                 checkBox.setText(unitCode);
-                checkBox.setTag(unitCode);
+                checkBox.setTag(unitIdTag);
 
                 // add the checkbox to the container
                 checkboxLayout.addView(checkBox);
@@ -176,6 +173,14 @@ private Boolean isValidStudentId(String studentId) {
         Log.d("UnitsFragment", "Student ID: " + studentId);
         // get the units already taken by the student
         List<String> takenUnits = DB.getStudentUnits(studentId);
+        // check if the list is empty
+        if (takenUnits.isEmpty()) {
+            Log.d("UnitsFragment", "No units taken");
+        }
+        // check the list values
+        for (String unitId : takenUnits) {
+            Log.d("UnitsFragment: ", "Unit ID: " + unitId);
+        }
 
         // get the layout where the checkboxes are located
         LinearLayout checkboxLayout = requireView().findViewById(R.id.checkbox_layout_units);
@@ -185,7 +190,7 @@ private Boolean isValidStudentId(String studentId) {
                 View child = checkboxLayout.getChildAt(i);
                 if (child instanceof CheckBox) {
                     CheckBox checkBox = (CheckBox) child;
-                    String unitId = checkBox.getTag().toString();
+                    String unitId = checkBox.getText().toString();
                     checkBox.setChecked(takenUnits.contains(unitId));
                 }
             }

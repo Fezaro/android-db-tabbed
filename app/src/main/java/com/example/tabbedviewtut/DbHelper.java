@@ -93,9 +93,19 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getStudentData(){
+    public Cursor getStudentsData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("Select * from StudentDetails", null);
+    }
+
+    // get details of a specific student using the student id
+    public Cursor getStudentDetails(String id){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor cursor =  sqLiteDatabase.rawQuery("Select * from StudentDetails where studId = ?", new String[]{id});
+        // check if db returns data
+        Log.d("DB_CHECK_StudentDets", "Number of rows returned by the cursor: " + cursor.getCount());
+        return cursor;
+
     }
 
     // insert unit data
@@ -199,19 +209,28 @@ public class DbHelper extends SQLiteOpenHelper {
         // create list to store units
         List<String> unitsList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("Select Units.unitId from Units JOIN Student_Units ON Units.unitId = Student_Units.unitId WHERE Student_Units.studId=?", new String[]{studId});
-        // get the cursor count
-        int count = cursor.getCount();
-        Log.d("DB_GET_STD_CHECK", "Number of rows returned by the cursor: " + count);
-        // loop through the cursor and add the units to the list
-        if(cursor.moveToFirst()){
-            do{
-                unitsList.add(cursor.getString(0));
-            }while (cursor.moveToNext());
-        }
-//        free cursor
-        cursor.close();
+        try {
+            Cursor cursor = sqLiteDatabase.rawQuery("Select Units.unitCode from Student_Units JOIN Units ON Student_Units.unitId = Units.unitId WHERE Student_Units.studId=?", new String[]{studId});
+            // get the cursor count
+            int count = cursor.getCount();
+            Log.d("DB_GET_STD_CHECK", "Number of rows returned by the cursor: " + count);
+            // loop through the cursor and add the units to the list
+            if (cursor.moveToFirst()) {
+                do {
+                    unitsList.add(cursor.getString(0));
+                } while (cursor.moveToNext());
+            }
 
+            if (cursor.moveToFirst()) {
+                do {
+                    unitsList.add(cursor.getString(0));
+                } while (cursor.moveToNext());
+            }
+//        free cursor
+            cursor.close();
+        }catch (Exception e){
+            Log.d("DB_GET_STD_CHECK2", e.getMessage());
+        }
         return unitsList;
     }
 

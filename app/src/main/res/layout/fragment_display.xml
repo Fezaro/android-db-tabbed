@@ -15,6 +15,15 @@
         android:layout_marginBottom="86dp"
         android:text="Student Details Display here"
         android:textSize="28dp" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/displayButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:hint="Enter Student ID"
+        android:id="@+id/studentIdDisplay"
+        />
 
     <Button
         android:id="@+id/displayButton"
@@ -22,8 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Display Data"
-        android:textSize="28dp"
-        />
+        android:textSize="28dp" />
 
 
 </RelativeLayout>
