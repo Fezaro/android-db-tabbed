@@ -33,19 +33,6 @@
         android:text="Fill in the following details" />
 
     <EditText
-        android:id="@+id/gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="410dp"
-        android:layout_marginEnd="164dp"
-        android:ems="10"
-        android:hint="Gender"
-        android:inputType="textPersonName"
-        android:minHeight="48dp" />
-
-    <EditText
         android:id="@+id/courseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,6 +126,18 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="275dp"
         android:text="Update" />
+
+
+    <Spinner
+        android:id="@+id/gender_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/courseName"
+        android:layout_marginHorizontal="55dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="10dp"
+        />
+
 
 </RelativeLayout>
 </ScrollView>
