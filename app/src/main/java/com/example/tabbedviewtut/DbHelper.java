@@ -221,11 +221,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
 
-            if (cursor.moveToFirst()) {
-                do {
-                    unitsList.add(cursor.getString(0));
-                } while (cursor.moveToNext());
-            }
 //        free cursor
             cursor.close();
         }catch (Exception e){

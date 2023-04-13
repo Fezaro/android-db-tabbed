@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +25,11 @@ public class DetailsFragment extends Fragment {
     EditText firstName,lastName,idNumber,courseName,gender;
     Button button, updateButton, deleteButton, adminButton;
     DbHelper DB;
+
+    String[] genderItems = {"Male", "Female"};
+    String[] courseItems = {"APT", "IST"};
+    AutoCompleteTextView autoCompleteTextViewGender, autoCompleteTextViewCourse;
+    ArrayAdapter<String> adapterItemsGender, adapterItemsCourse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,12 +46,41 @@ public class DetailsFragment extends Fragment {
         firstName = view.findViewById(R.id.firstName);
         lastName = view.findViewById(R.id.lastName);
         idNumber = view.findViewById(R.id.idNumber);
-        courseName = view.findViewById(R.id.courseName);
-        gender = view.findViewById(R.id.gender);
+//        courseName = view.findViewById(R.id.courseName);
+//        gender = view.findViewById(R.id.gender);
         button = view.findViewById(R.id.button);
         updateButton = view.findViewById(R.id.updateButton);
         deleteButton = view.findViewById(R.id.deleteButton);
         adminButton = view.findViewById(R.id.adminButton);
+        autoCompleteTextViewGender = view.findViewById(R.id.auto_complete_text_gender);
+        autoCompleteTextViewCourse = view.findViewById(R.id.auto_complete_text_course);
+
+        adapterItemsGender = new ArrayAdapter<String>(getContext(), R.layout.list_item, genderItems);
+        adapterItemsCourse = new ArrayAdapter<String>(getContext(), R.layout.list_item, courseItems);
+
+        autoCompleteTextViewGender.setAdapter(adapterItemsGender);
+        autoCompleteTextViewCourse.setAdapter(adapterItemsCourse);
+        autoCompleteTextViewGender.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        autoCompleteTextViewCourse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
 
         // set button click listener
         button.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +153,9 @@ public class DetailsFragment extends Fragment {
         studentDetails[0] = firstName.getText().toString();
         studentDetails[1] = lastName.getText().toString();
         studentDetails[2] = idNumber.getText().toString();
-        studentDetails[3] = courseName.getText().toString();
-        studentDetails[4] = gender.getText().toString();
+        studentDetails[3] = autoCompleteTextViewCourse.getText().toString();
+        studentDetails[4]  = autoCompleteTextViewGender.getText().toString();
+
         return studentDetails;
     }
 

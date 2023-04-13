@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,7 @@ public class DisplayFragment extends Fragment {
 
         // get the units the student has selected
         List units_res = DB.getStudentUnits(stuId);
+        Log.d("/n/n units_res.size()", String.valueOf(units_res.size()));
 
         // create a string buffer to hold the data
 
