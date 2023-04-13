@@ -136,7 +136,8 @@
         android:layout_marginHorizontal="55dp"
         android:layout_marginTop="26dp"
         android:layout_marginBottom="10dp"
-        />
+        android:minHeight="48dp"
+        android:outlineAmbientShadowColor="#efda11"/>
 
 
 </RelativeLayout>
